@@ -20,5 +20,12 @@ max([X | Xs], MaxTemp, MinTemp, Max, Min) :- X > MaxTemp, !, max(Xs, X, MinTemp,
 max([X | Xs], MaxTemp, MinTemp, Max, Min) :- X < MinTemp, !, max(Xs, MaxTemp, X, Max, Min).
 max([X | Xs], MaxTemp, MinTemp, Max, Min) :- max(Xs, MaxTemp, MinTemp, Max, Min).
 % 1.6
-split([], _, [], []).
-split([X | Xs], N2, L1, L2) :-  
+split(L, N, L1, L2) :- split(L, N, [], L1, L2).
+split(L, 0, L1, L1, L).
+split([X | Xs], N, L1Temp, L1, L2) :- NNew is N - 1, append(L1Temp, [X], L1New), split(Xs, NNew, L1New, L1, L2).
+% 1.7
+rotate([X | Xs], R) :- append(Xs, [X], R).
+% 1.8
+dice(X) :- dice(0, 6, X).
+dice(B, T, X) :- B =< T, X is B + 1.
+dice(B, T, X) :- XNext is B + 1, XNext < T, dice(XNext, T, X).
