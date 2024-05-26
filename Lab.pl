@@ -21,17 +21,19 @@ max([X | Xs], MaxTemp, MinTemp, Max, Min) :- X < MinTemp, !, max(Xs, MaxTemp, X,
 max([X | Xs], MaxTemp, MinTemp, Max, Min) :- max(Xs, MaxTemp, MinTemp, Max, Min).
 % 1.6
 split(L, N, L1, L2) :- split(L, N, [], L1, L2).
-split(L, 0, L1, L1, L).
+split(L2, 0, L1, L1, L2).
 split([X | Xs], N, L1Temp, L1, L2) :- NN is N - 1, append(L1Temp, [X], LL), split(Xs, NN, LL, L1, L2).
 % 1.7
-rotate([X | Xs], R) :- append(Xs, [X], R).
+rotate([H | T], R) :- rotate(T, H, R).
+rotate([], H, [H]).
+rotate([E | T], H, [E | R]) :- rotate(T, H, R).
 % 1.8
 die(X) :- die(1, 6, X).
 die(S, _, S).
 die(C, E, X) :- C < E, CNext is C + 1, die(CNext, E, X).
 % 1.9
 three_dice(N, [D1, D2, D3]) :- die(D1), die(D2), die(D3), DD is D1 + D2 + D3, DD =:= N.
-	
+
 % 2.2
 dropFirst(X, [X | T], T) :- !.
 dropFirst(X, [H | Xs], [H | L]) :- dropFirst(X, Xs, L).
@@ -40,8 +42,8 @@ dropLast(X, [H | Xs], [H | L]) :- dropLast(X, Xs, L), !.
 dropLast(X, [X | T], T).
 
 dropAll(_, [], []).
-dropAll(X, [H | Xs], [H | L]) :- dropAll(X, Xs, L), !.
-dropAll(X, [X | T], L) :- dropAll(X, T, L).
+dropAll(X, [X | T], L) :- !, dropAll(X, T, L).
+dropAll(X, [H | Xs], [H | L]) :- dropAll(X, Xs, L).
 
 % 3.1
 % fromList(+List, -Graph)
